@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.gradleandroidlibrary.peterarct.jokejavalibrary.JokeSupplier;
 
+import javalibraryexercise.peterarct.com.jokeandroidlibrary.JokeDisplayActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
         String joke = JokeSupplier.getTestJoke();
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
+        JokeDisplayActivity.launch(this,joke);
     }
 
 

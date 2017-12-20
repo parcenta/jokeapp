@@ -1,16 +1,17 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "com.udacity.gradle.builditbigger"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -28,11 +29,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.google.android.gms:play-services-ads:11.8.0'
-
-    // Adding to compilation of the Java Library.
-    compile project(':jokeJavaLibrary')
-
-    // Adding the compilation of the ANDROID Library.
-    compile project(':jokeandroidlibrary')
+    testCompile 'junit:junit:4.12'
 }

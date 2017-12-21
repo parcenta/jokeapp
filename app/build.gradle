@@ -39,5 +39,6 @@ dependencies {
     compile project(':jokeandroidlibrary')
 
     // Adding dependency to GCE backend module
-    compile project(':backend');
+    // Source: https://stackoverflow.com/questions/33170034/how-to-import-a-backend-module-class-into-an-app-module-in-android-studio
+    compile project(path: ':backend', configuration: 'android-endpoints')
 }

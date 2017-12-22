@@ -36,10 +36,11 @@ appengine {
     appcfg {
         oauth2 = true
     }
+
+    httpAddress = "0.0.0.0"
     endpoints {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
         googleClientVersion = '1.23.0'
     }
-    httpAddress = "0.0.0.0"
 }

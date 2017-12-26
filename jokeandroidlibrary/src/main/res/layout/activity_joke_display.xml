@@ -4,17 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="javalibraryexercise.peterarct.com.jokeandroidlibrary.JokeDisplayActivity">
 
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <TextView
-            android:id="@+id/display_joke_text_view"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="This is a joke..."/>
-
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/joke_label"
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_marginBottom="6dp"/>
+            <TextView
+                android:id="@+id/display_joke_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                tools:text="This is a joke..."
+                style="@style/Base.TextAppearance.AppCompat.Medium"/>
+        </LinearLayout>
+    </FrameLayout>
 </layout>

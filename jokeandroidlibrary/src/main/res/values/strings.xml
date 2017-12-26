@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">jokeAndroidLibrary</string>
+
+    <string name="joke_activity_label">Joke Display</string>
+    <string name="joke_label">And here is the joke:</string>
 </resources>

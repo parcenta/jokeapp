@@ -6,7 +6,7 @@
         android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name=".JokeDisplayActivity"></activity>
+        <activity android:name=".JokeDisplayActivity" android:label="@string/joke_activity_label"></activity>
     </application>
 
 </manifest>

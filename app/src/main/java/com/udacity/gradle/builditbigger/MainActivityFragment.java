@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -28,6 +29,13 @@ import java.io.IOException;
  */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>{
 
+    // Saved Instance.
+    private static String IS_FETCHING_JOKES = "IS_FETCHING_JOKES";
+    private boolean isFetchingJokes;
+
+    // For Loader
+    private static int FETCH_JOKES_LOADER_ID = 4545;
+
     private FragmentMainBinding mBinding;
 
     public MainActivityFragment() {
@@ -51,11 +59,26 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mBinding.tellJokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getLoaderManager().restartLoader(0,null,MainActivityFragment.this);
+                getLoaderManager().restartLoader(FETCH_JOKES_LOADER_ID,null,MainActivityFragment.this);
             }
         });
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Managing the isFetchingJokes flag
+        if(savedInstanceState!=null && savedInstanceState.containsKey(IS_FETCHING_JOKES)){
+            isFetchingJokes = savedInstanceState.getBoolean(IS_FETCHING_JOKES);
+            if(isFetchingJokes){
+                mBinding.loadingJokeContainer.setVisibility(View.VISIBLE);
+                getLoaderManager().initLoader(FETCH_JOKES_LOADER_ID,null,this);
+            }
+        }else
+            isFetchingJokes = false;
     }
 
     @Override
@@ -66,6 +89,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             protected void onStartLoading() {
                 super.onStartLoading();
                 mBinding.loadingJokeContainer.setVisibility(View.VISIBLE);
+                isFetchingJokes = true;
                 forceLoad();
             }
 
@@ -80,7 +104,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                             // options for running against local devappserver
                             // - 10.0.2.2 is localhost's IP address in Android emulator
                             // - turn off compression when running against local devappserver
-                            .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                            .setApplicationName("BuildItBigger")
+                            .setRootUrl("http://192.168.0.105:9091/_ah/api/")
                             .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                                 @Override
                                 public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
@@ -103,6 +128,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
+        isFetchingJokes = false;
         mBinding.loadingJokeContainer.setVisibility(View.GONE);
         Toast.makeText(getActivity(),data,Toast.LENGTH_SHORT).show();
     }
@@ -110,5 +136,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<String> loader) {
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_FETCHING_JOKES,isFetchingJokes);
     }
 }

@@ -1,26 +1,19 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
+import com.udacity.gradle.builditbigger.testing.JokeAppIdlingResource;
+import com.udacity.gradle.builditbigger.testing.JokeAppIdlingResourceHandler;
 
-import java.io.IOException;
+public class MainActivity extends AppCompatActivity implements JokeAppIdlingResourceHandler{
 
-
-public class MainActivity extends AppCompatActivity
-                                    {
+    private JokeAppIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +43,23 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // ------------------------------------------------------------
+    // FOR TESTING ONLY. Source: My Baking App project.
+    // ------------------------------------------------------------
+    @Override
+    public void setIdle(boolean isIdle) {
+        if (mIdlingResource != null) mIdlingResource.setIdleState(isIdle);
+    }
+
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new JokeAppIdlingResource();
+        }
+        return mIdlingResource;
     }
 }

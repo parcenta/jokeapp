@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.udacity.gradle.builditbigger.databinding.FragmentMainBinding;
+import com.udacity.gradle.builditbigger.testing.JokeAppIdlingResourceHandler;
 
 
 /**
@@ -21,7 +22,10 @@ public class MainActivityFragment extends Fragment{
     private FetchJokeAsyncTask mAsyncTask;
 
     // Binding
-    private FragmentMainBinding mBinding;
+    FragmentMainBinding mBinding;
+
+    // Testing Handler
+    private JokeAppIdlingResourceHandler mHandler;
 
     public MainActivityFragment() {
     }
@@ -48,12 +52,26 @@ public class MainActivityFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 if (mAsyncTask!=null && !mAsyncTask.isCancelled()) mAsyncTask.cancel(true);
-                mAsyncTask = new FetchJokeAsyncTask();
+                mAsyncTask = new FetchJokeAsyncTask(mHandler);
                 mAsyncTask.execute(getActivity());
             }
         });
 
         return mBinding.getRoot();
+    }
+
+    // Override onAttach to make sure that the container activity has implemented the callback
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mHandler = (JokeAppIdlingResourceHandler) context;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

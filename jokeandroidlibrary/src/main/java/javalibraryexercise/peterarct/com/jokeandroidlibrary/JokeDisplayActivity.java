@@ -12,7 +12,7 @@ import javalibraryexercise.peterarct.com.jokeandroidlibrary.databinding.Activity
 
 public class JokeDisplayActivity extends AppCompatActivity {
 
-    public static String JOKE_EXTRA = "JOKE_EXTRA";
+    private static final String JOKE_EXTRA = "JOKE_EXTRA";
 
     ActivityJokeDisplayBinding mBinding;
 

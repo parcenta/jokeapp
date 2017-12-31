@@ -38,14 +38,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs'
-    })
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:support-v4:26.1.0'
     compile 'com.android.support:multidex:1.0.1'
-
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2' // For UI Testing (Waiting for asynctask to finish)
 
     // Add this dependency only for the Free Version
     freeCompile 'com.google.android.gms:play-services-ads:11.8.0'
@@ -57,5 +53,9 @@ dependencies {
     // Source: https://stackoverflow.com/questions/33170034/how-to-import-a-backend-module-class-into-an-app-module-in-android-studio
     compile project(path: ':backend', configuration: 'android-endpoints')
 
-
+    // For Testing
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
+    })
 }

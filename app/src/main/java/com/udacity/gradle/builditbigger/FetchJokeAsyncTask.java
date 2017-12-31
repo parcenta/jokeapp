@@ -2,22 +2,17 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
+import com.udacity.gradle.builditbigger.testing.JokeAppIdlingResourceHandler;
 
 import java.io.IOException;
 
 import javalibraryexercise.peterarct.com.jokeandroidlibrary.JokeDisplayActivity;
-
-/**
- * Created by Andrés on 12/26/17.
- */
 
 // --------------------------------------
 // Async Task for Fetching jokes.
@@ -25,10 +20,24 @@ import javalibraryexercise.peterarct.com.jokeandroidlibrary.JokeDisplayActivity;
 public class FetchJokeAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
+    private JokeAppIdlingResourceHandler mIdlingResourceHandler;
+
+    FetchJokeAsyncTask(JokeAppIdlingResourceHandler idlingResourceHandler){
+        this.mIdlingResourceHandler = idlingResourceHandler;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        // Mark that the app is in not IDLE. (For Testing)
+        if (mIdlingResourceHandler!=null) mIdlingResourceHandler.setIdle(false);
+    }
 
     @Override
     protected String doInBackground(Context... contexts) {
 
+        // Get Context.
         context = contexts[0];
 
         if(myApiService == null) {  // Only do this once
@@ -51,14 +60,17 @@ public class FetchJokeAsyncTask extends AsyncTask<Context, Void, String> {
 
         try {
             return myApiService.tellRandomJoke().execute().getData();
-        } catch (IOException e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
 
     @Override
-    protected void onPostExecute(String joke) {
-        //Toast.makeText(context, joke, Toast.LENGTH_LONG).show();
-        JokeDisplayActivity.launch(context,joke);
+    protected void onPostExecute(String response) {
+        // Now mark that the app is IDLE (For Testing)
+        if (mIdlingResourceHandler!=null) mIdlingResourceHandler.setIdle(true);
+
+        // Display the Joke in the activity.
+        JokeDisplayActivity.launch(context,response);
     }
 }
